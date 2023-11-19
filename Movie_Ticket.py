@@ -241,7 +241,7 @@ def delete_show():
     conn=mysql.connector.connect(host='localhost',password='root',user='root',database='Movie_Management_system')
     c=conn.cursor()
     c.execute("DELETE FROM show_data where show_id=" + delete_show_box.get())
-    c.execute("DELETE FROM book_data where show_id=" + delete_show_box.get())
+    #c.execute("DELETE FROM book_data where show_id=" + delete_show_box.get())
     conn.commit()
     conn.close()
 
@@ -362,13 +362,15 @@ def book():
     conn=mysql.connector.connect(host='localhost',password='root',user='root',database='Movie_Management_system')
     c=conn.cursor()
     '''c.execute("""CREATE TABLE book_data(
-        movie_id integer NOT NULL,
-        show_id integer NOT NULL,
-        t_id integer primary Key,
+        movie_id integer,
+        show_id integer,
+        t_id integer,
         c_name text ,
         email_id text,
         phone_no text,
-        seat_no text UNIQUE
+        seat_no integer,
+        primary key(movie_id,show_id,t_id,seat_no),
+        foreign key(show_id,movie_id) references show_data(show_id,movie_id) on delete cascade
         )""")'''
 
     record_id=select_m_id.get()
@@ -463,12 +465,14 @@ def show_data():
     conn=mysql.connector.connect(host='localhost',password='root',user='root',database='Movie_Management_system')
     c=conn.cursor()
     '''c.execute("""CREATE TABLE show_data(
-        show_id integer primary key,
-        movie_id integer NOT NULL,
+        show_id integer,
+        movie_id integer,
         st_time text ,
         end_time text,
         show_date text,
-        price text
+        price text,
+        primary key(show_id,movie_id),
+        foreign key(movie_id) references movie_data(movie_id) on delete cascade
         )""")'''
 
     record_id=delete_box.get()
